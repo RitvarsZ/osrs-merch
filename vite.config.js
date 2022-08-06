@@ -8,6 +8,11 @@ export default defineConfig({
             host: 'localhost',
         }
     },
+    resolve: {
+        alias: {
+            '@': '/resources/js',
+        }
+    },
     plugins: [
         laravel({
             input: 'resources/js/app.js',
