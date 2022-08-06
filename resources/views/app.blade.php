@@ -11,7 +11,7 @@
 
         <!-- Scripts -->
         @routes
-        @vite('resources/ts/app.ts')
+        @vite('resources/js/app.js')
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
