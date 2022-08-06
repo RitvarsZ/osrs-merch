@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ItemController;
 use Inertia\Inertia;
 
 /*
@@ -15,8 +16,15 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::group(['middleware' => ['web', 'auth', 'verified']], function () {
+    
+    Route::get('/', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+    
+    Route::get('/items', [ItemController::class, 'index'])->name('items.index');
+    Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');
+    
+});
 
 require __DIR__.'/auth.php';
