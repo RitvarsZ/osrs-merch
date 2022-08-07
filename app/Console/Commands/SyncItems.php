@@ -5,15 +5,16 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Services\OsrsWikiApiService;
 use App\Models\Item;
+use Illuminate\Support\Facades\Storage;
 
-class FetchItems extends Command
+class SyncItems extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'osrs-api:sync-items';
+    protected $signature = 'osrs:sync';
 
     /**
      * The console command description.
@@ -42,6 +43,18 @@ class FetchItems extends Command
         
         foreach ($items as $item) {
             $existingItem = Item::where('item_id', $item['item_id'])->first();
+
+            if (Storage::disk('public')->exists('/items/' . $item['item_id'] . '.png') == false) {
+                $iconResponse = (new OsrsWikiApiService)->fetchIcon($item['icon']);
+                if ($iconResponse->status() == 200) {
+                    $file = imagecreatefromstring($iconResponse->body());
+                    $file = imagepng($file, storage_path('app/public/tmp/' . $item['item_id'] . '.png'));
+                    Storage::disk('public')->move('tmp/' . $item['item_id'] . '.png', 'items/' . $item['item_id'] . '.png');
+                    $item['icon'] = '/items/' . $item['item_id'] . '.png';
+                } else {
+                    $item['icon'] = '';
+                }
+            }            
 
             if ($existingItem) {
                 $existingItem->update($item);
