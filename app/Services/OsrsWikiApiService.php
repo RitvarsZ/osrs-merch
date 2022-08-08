@@ -2,17 +2,17 @@
 
 namespace App\Services;
 
-use GdImage;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class OsrsWikiApiService {
     static function fetchItems() {
-        $url = env('OSRS_API_URL') . '/mapping';
+        $url = config('osrs.api_url') . 'mapping';
         $items = [];
-        
-        $response = Http::get($url);
+        $response = Http::withHeaders([
+            'User-Agent' => config('osrs.user_agent'),
+        ])->get($url);
         $response = $response->json();
         
         foreach ($response as $item) {
@@ -24,7 +24,6 @@ class OsrsWikiApiService {
                 'members' => $item['members'],
                 'lowalch' => $item['lowalch'] ?? null,
                 'highalch' => $item['highalch'] ?? null,
-                'value' => $item['value'],
                 'limit' => $item['limit'] ?? null,
             ];
         }
