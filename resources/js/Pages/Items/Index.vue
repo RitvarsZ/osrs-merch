@@ -3,7 +3,7 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import LoadingVue from '@/Components/Loading.vue';
 import type { Item } from '@/Types/Item';
 import type { Paginate } from '@/Types/Laravel/Paginate';
-import { Inertia } from '@inertiajs/inertia'
+import { Inertia, type RequestPayload } from '@inertiajs/inertia'
 import { Head } from '@inertiajs/inertia-vue3';
 import { watch, ref } from 'vue';
 import type { Header as TableHeader, ServerOptions } from "vue3-easy-data-table";
@@ -30,7 +30,6 @@ const headers: TableHeader[] = [
   { text: 'NAME', value: 'name', sortable: true },
   { text: 'MEMBERS', value: 'members' },
   { text: 'HIGHALCH', value: 'highalch', sortable: true },
-  { text: 'GE AVG PRICE', value: 'value', sortable: true },
   { text: 'LIMIT', value: 'limit', sortable: true },
 ];
 
@@ -38,11 +37,11 @@ const fetchPage = async () => {
   loading.value = true;
 
   const url = route('items.index');
-  const params = {
+  const params: RequestPayload = {
     page: serverOptions.value.page,
     per_page: serverOptions.value.rowsPerPage,
-    sortBy: serverOptions.value.sortBy,
-    sortType: serverOptions.value.sortType,
+    sortBy: serverOptions.value.sortBy || null,
+    sortType: serverOptions.value.sortType || null,
     search: search.value,
   };
 
