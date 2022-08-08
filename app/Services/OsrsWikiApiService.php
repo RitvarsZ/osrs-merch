@@ -31,21 +31,20 @@ class OsrsWikiApiService {
         return $items;
     }
 
+    static function fetchLatest() {
+        $url = config('osrs.api_url') . 'latest';
+        $response = Http::withHeaders([
+            'User-Agent' => config('osrs.user_agent'),
+        ])->get($url);
+        
+        return $response->json()['data'];
+    }
+
     static function fetchIcon($icon): Response {
         $icon = str_replace(' ', '_', $icon);
         $url = 'https://oldschool.runescape.wiki/images/' . $icon;
         $response = Http::get($url);
         
-        return $response;
-
-        if ($response->status() == 200) {
-            $file = imagecreatefromstring($response->body());
-            $tmpFile = imagepng($file, storage_path('app/public/tmp/' . $icon));
-            Storage::disk('public')->move('tmp/' . $icon, 'items/' . $icon);
-            
-            return $icon;
-        }
-
-        return '';        
+        return $response;    
     }
 }

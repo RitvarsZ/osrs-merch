@@ -1,3 +1,5 @@
+import type { ItemPrice } from "./ItemPrice";
+
 export interface Item {
   id: number;
   item_id: number;
@@ -8,6 +10,7 @@ export interface Item {
   lowalch: number;
   highalch: number;
   limit: number;
+  latest_price?: ItemPrice
   created_at: string;
   updated_at: string;
 };
