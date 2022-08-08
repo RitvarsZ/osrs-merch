@@ -7,7 +7,6 @@ export interface Item {
   members: boolean;
   lowalch: number;
   highalch: number;
-  value: number;
   limit: number;
   created_at: string;
   updated_at: string;

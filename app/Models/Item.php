@@ -17,7 +17,6 @@ class Item extends Model
         'members',
         'lowalch',
         'highalch',
-        'value',
         'limit',
     ];
 }
